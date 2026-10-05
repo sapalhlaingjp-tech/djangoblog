@@ -1,2 +1,10 @@
-<h1>About {{content}}</h1>
-<p>This is a simple blog</p>
+{% extends 'blog/base.html' %}
+
+{% block title %}About{% endblock %}
+
+{% block content %}
+<div class="content-box">
+    <h1>About {{ team }}</h1>
+    <p>This is a simple blog created with Django to share ideas, stories and projects.</p>
+</div>
+{% endblock %}

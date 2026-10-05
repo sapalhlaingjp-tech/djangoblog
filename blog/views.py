@@ -1,13 +1,73 @@
-from django.shortcuts import render
+from django.shortcuts import render 
+from django.views.generic import ListView, DetailView 
+from .models import Post, Category
+from django.views.generic.edit import CreateView,UpdateView, DeleteView
+from django.urls import reverse_lazy
+from .forms import PostForm
 
-def home(request):
-    return render(request,"blog/home.html",{"title":"This is the Djangoblog Homepage."})
 
-def about(request):
-    return render(request, "blog/about.html", {"content":"This is the Djangoblog team."})
+class PostCreateView(CreateView):
+    model = Post
+    form_class = PostForm
+    template_name = "blog/post_form.html"
 
-def contact(request):
-    return render(request, "blog/contact.html", {"title":"Song"})
+    def get_success_url(self):
+        return reverse_lazy("post_detail", kwargs={"slug": self.object.slug})
 
-def base(request):
-    return render(request, "blog/base.html",{"title":"me"})
+
+class PostUpdateView(UpdateView):
+    model = Post
+    form_class = PostForm
+    template_name = "blog/post_form.html"
+
+    def get_success_url(self):
+        return reverse_lazy("post_detail", kwargs={"slug": self.object.slug})
+
+class PostListView(ListView): 
+    model = Post 
+    template_name = "blog/post_list.html" 
+    paginate_by = 6
+
+    def get_queryset(self):
+     return Post.objects.filter(status="published").order_by("-created_at")
+
+    def get_context_data(self, **kwargs):
+     context = super().get_context_data(**kwargs)
+     context["categories"] = Category.objects.all()
+     return context
+
+class PostCreateView(CreateView):
+   model = Post
+   fields = ["title","content","category","tags","status","cover_image"]
+   template_name = "blog/post_form.html"
+
+   def get_success_url(self):
+      return reverse_lazy("post_detail", kwargs={"slug":self.object.slug})
+   
+class PostUpdateView(UpdateView):
+   model = Post
+   fields = ["title","content","category","tags","status","cover_image"]
+   template_name = "blog/post_form.html"
+
+   def get_success_url(self):
+      return reverse_lazy("post_detail", kwargs={"slug":self.object.slug})
+   
+class PostDeleteView(DeleteView):
+   model = Post
+   template_name = "blog/post_confirm_delete.html"
+   success_url = reverse_lazy("home")
+
+         
+class PostDetailView(DetailView): 
+    model = Post 
+    template_name = "blog/post_detail.html" 
+    context_object_name = "post"
+
+    def get_queryset(self):
+     return Post.objects.filter(status="published")
+
+def about(request): 
+    return render(request, "blog/about.html", {"team": "DjangoBlog Team"})
+
+def contact(request): 
+    return render(request, "blog/contact.html")
