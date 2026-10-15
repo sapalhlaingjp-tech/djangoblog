@@ -1,5 +1,8 @@
 body {
-    background: linear-gradient(180deg, #fdf1f1 0%, #f8e6e6 100%);
+    background-image: url("../images/background.png");
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
     color: #311111;
     font-family: 'Segoe UI', Arial, sans-serif;
 }
@@ -79,10 +82,42 @@ body {
     border: 1px solid rgba(127, 13, 13, 0.08);
     border-radius: 22px;
     background: rgba(255, 255, 255, 0.92);
-    min-height: 320px;
+    min-height: 0;
     box-shadow: 0 10px 20px rgba(88, 17, 17, 0.08);
-    padding: 0.5rem;
+    padding: 0.4rem;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.post-card .card-img-top {
+    height: 200px;
+    object-fit: cover;
+    border-radius: 14px;
+}
+
+.post-card .card-body {
+    padding: 0.65rem;
+}
+
+.post-card .post-tag {
+    font-size: 0.68rem;
+    padding: 0.25rem 0.65rem;
+}
+
+.post-card .card-title {
+    font-size: 1.3rem;
+    line-height: 1.15;
+    margin-top: 0.5rem !important;
+    margin-bottom: 0.35rem;
+}
+
+.post-card .card-text {
+    font-size: 0.88rem;
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
+}
+
+.post-card .btn {
+    padding: 0.5rem 0.8rem;
 }
 
 .post-card:hover {
@@ -208,7 +243,7 @@ h1, h2, h3, h4, h5 {
     gap: 1.1rem;
 }
 
-.post-form p {
+.post-form-field {
     display: flex;
     flex-direction: column;
     gap: 0.55rem;
@@ -225,6 +260,7 @@ h1, h2, h3, h4, h5 {
 .post-form textarea,
 .post-form select {
     width: 70%;
+    max-width: 100%;
     border: 1px solid rgba(255,255,255,0.25);
     background: rgba(255,255,255,0.96);
     border-radius: 14px;
@@ -254,6 +290,11 @@ h1, h2, h3, h4, h5 {
     font-size: 1.05rem;
 }
 
+.post-form-error {
+    color: #ffd8d8;
+    font-size: 0.9rem;
+}
+
 @media (max-width: 767px) {
     .hero-banner {
         flex-direction: column;
@@ -268,5 +309,10 @@ h1, h2, h3, h4, h5 {
     .post-form-box {
         padding: 1.5rem 1rem;
     }
-}
 
+    .post-form input,
+    .post-form textarea,
+    .post-form select {
+        width: 100%;
+    }
+}

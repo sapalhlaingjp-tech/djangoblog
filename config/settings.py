@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'blog',
+    'blog.apps.BlogConfig',
     'debug_toolbar',
 ]
 
@@ -142,3 +142,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+LOGIN_REDIRECT_URL = "home"
+LOGOUT_REDIRECT_URL = "home"
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+from django.contrib.messages import constants as messages
+MESSAGE_TAGS = {messages.ERROR: "danger"}

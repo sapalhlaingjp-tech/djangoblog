@@ -1,0 +1,20 @@
+{% extends "blog/base.html" %}
+
+{% block title %}My Posts{% endblock %}
+
+{% block content %}
+<h1>My Posts</h1>
+
+<div class="row">
+  {% for post in page_obj %}
+    {% include "blog/partials/_post_card.html" %}
+    {% empty %}
+    <div class="col-12">
+      <p class="text-center text-muted py-5">You haven't written any posts yet — <a href="{% url 'post_create' %}">start now!</a></p>
+    </div>
+  {% endfor %}
+</div>
+
+{% include "blog/partials/_pagination.html" %}
+
+{% endblock %}

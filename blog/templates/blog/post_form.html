@@ -1,6 +1,8 @@
 {% extends "blog/base.html" %}
 
-{% block title %}{% if object %}Edit Post{% else %}New Post{% endif %}{% endblock %}
+{% block title %}
+    {% if object %}Edit Post{% else %}New Post{% endif %}
+{% endblock %}
 
 {% block content %}
 
@@ -10,22 +12,51 @@
     <div class="alert alert-danger">{{ form.non_field_errors }}</div>
 {% endif %}
 
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
+<div class="content-box post-form-box">
 
-    {% for field in form %}
+    <form method="post" enctype="multipart/form-data" class="post-form">
+
+        {% csrf_token %}
+
+        {% for field in form %}
+
+            <div class="post-form-field">
+
+                {{ field.label_tag }}
+                {{ field }}
+
+                {% if field.errors %}
+                    <div class="post-form-error">{{ field.errors|striptags }}</div>
+                {% endif %}
+
+            </div>
+
+        {% endfor %}
+
+        <!-- Image Preview -->
         <div class="mb-3">
-            {{ field.label_tag }}
-            {{ field }}
-
-            {% if field.errors %}
-                <div class="text-danger small">{{ field.errors|striptags }}</div>
-            {% endif %}
+            <img id="preview" style="max-width: 200px; display: none;" class="rounded" alt="Image Preview">
         </div>
-    {% endfor %}
 
-    <button type="submit" class="btn btn-success">Save</button>
-</form>
+        <button type="submit" class="btn btn-success">
+            Save
+        </button>
+
+    </form>
+
+</div>
+
+<script>
+    const fileInput = document.querySelector('input[type="file"]');
+
+    if (fileInput) {
+        fileInput.addEventListener('change', function(event) {
+            const preview = document.getElementById('preview');
+            preview.src = URL.createObjectURL(event.target.files[0]);
+            preview.style.display = 'block';
+        });
+    }
+</script>
 
 {% endblock %}
 
