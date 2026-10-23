@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from django.contrib.auth import get_user_model
 
 from .models import Post, Category
 from .forms import PostForm, RegisterForm
@@ -21,6 +22,27 @@ class MyPostsView(LoginRequiredMixin, ListView):
         return Post.objects.filter(
             author=self.request.user
         ).order_by("-created_at")
+
+
+class AuthorPostsView(ListView):
+    model = Post
+    template_name = "blog/author_posts.html"
+    paginate_by = 6
+
+    def get_queryset(self):
+        self.author = get_object_or_404(
+            get_user_model(),
+            username=self.kwargs["username"],
+        )
+        return Post.objects.filter(
+            author=self.author,
+            status="published",
+        ).order_by("-created_at")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["author"] = self.author
+        return context
 
 
 class RegisterView(CreateView):
@@ -127,3 +149,6 @@ def contact(request):
 
 def custom_403(request, exception=None):
     return render(request, "blog/403.html", status=403)
+
+def test_500(request):
+    raise Exception("Test 500 error")

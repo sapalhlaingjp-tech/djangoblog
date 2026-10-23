@@ -23,6 +23,9 @@ import debug_toolbar
 handler403 = "blog.views.custom_403"
 from blog.views import custom_403
 
+def trigger_500(request):
+    raise Exception("Test 500 error")
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("login/", auth_views.LoginView.as_view(template_name="blog/login.html"), name="login",),
@@ -30,6 +33,7 @@ urlpatterns = [
     path("", include("blog.urls")),
     path("403-test/", custom_403, name="403_test"),
     path("__debug__/", include(debug_toolbar.urls)),
+    path("text-500/", trigger_500),
 ]
 
 if settings.DEBUG:

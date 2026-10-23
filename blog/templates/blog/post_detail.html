@@ -6,7 +6,13 @@
 
 {% block content %}
   {% if post.cover_image %}
-    <img src="{{ post.cover_image.url }}" class="img-fluid rounded mb-3" alt="{{ post.title }}">
+    <img src="{{ post.cover_image.url }}" class="img-fluid rounded mb-3" alt="{{ post.title }} photo 1">
+  {% endif %}
+  {% if post.image_2 %}
+    <img src="{{ post.image_2.url }}" class="img-fluid rounded mb-3" alt="{{ post.title }} photo 2">
+  {% endif %}
+  {% if post.image_3 %}
+    <img src="{{ post.image_3.url }}" class="img-fluid rounded mb-3" alt="{{ post.title }} photo 3">
   {% endif %}
 
   <h1>{{ post.title }}</h1>

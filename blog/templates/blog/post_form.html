@@ -19,11 +19,21 @@
         {% csrf_token %}
 
         {% for field in form %}
-
+            {% if field.name == "cover_image" %}
+                <p>Upload exactly 3 photos. The cover photo counts as one. Each photo must be JPG, PNG, or WEBP and no larger than 5 MB.</p>
+            {% endif %}
             <div class="post-form-field">
 
                 {{ field.label_tag }}
                 {{ field }}
+
+                {% if field.name == "cover_image" and object.cover_image %}
+                    <img src="{{ object.cover_image.url }}" class="rounded mt-2" style="max-width: 200px;" alt="{{ object.title }} photo 1">
+                {% elif field.name == "image_2" and object.image_2 %}
+                    <img src="{{ object.image_2.url }}" class="rounded mt-2" style="max-width: 200px;" alt="{{ object.title }} photo 2">
+                {% elif field.name == "image_3" and object.image_3 %}
+                    <img src="{{ object.image_3.url }}" class="rounded mt-2" style="max-width: 200px;" alt="{{ object.title }} photo 3">
+                {% endif %}
 
                 {% if field.errors %}
                     <div class="post-form-error">{{ field.errors|striptags }}</div>
@@ -32,11 +42,6 @@
             </div>
 
         {% endfor %}
-
-        <!-- Image Preview -->
-        <div class="mb-3">
-            <img id="preview" style="max-width: 200px; display: none;" class="rounded" alt="Image Preview">
-        </div>
 
         <button type="submit" class="btn btn-success">
             Save
@@ -47,16 +52,23 @@
 </div>
 
 <script>
-    const fileInput = document.querySelector('input[type="file"]');
+    document.querySelectorAll('input[type="file"]').forEach(function(fileInput) {
+        const preview = document.createElement('img');
+        preview.className = 'rounded mt-2';
+        preview.style.cssText = 'max-width: 200px; display: none;';
+        preview.alt = 'Selected photo preview';
+        fileInput.parentElement.appendChild(preview);
 
-    if (fileInput) {
         fileInput.addEventListener('change', function(event) {
-            const preview = document.getElementById('preview');
-            preview.src = URL.createObjectURL(event.target.files[0]);
-            preview.style.display = 'block';
+            if (event.target.files.length) {
+                preview.src = URL.createObjectURL(event.target.files[0]);
+                preview.style.display = 'block';
+            } else {
+                preview.removeAttribute('src');
+                preview.style.display = 'none';
+            }
         });
-    }
+    });
 </script>
 
 {% endblock %}
-
